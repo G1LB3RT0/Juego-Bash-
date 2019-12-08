@@ -1,0 +1,45 @@
+#!/bin/bash
+max=$(cat "diccionario.txt" | wc -l)
+num=$(( $RANDOM%max ))
+cad=$(head -$num "diccionario.txt" | tail -1 | tr [:upper:] [:lower:])
+
+for var in $(seq 0 $((${#cad}-1)))
+do
+ palabra=("${palabra[@]}" ${cad:$var:1})
+ respuesta=("${respuesta[@]}" _)
+done
+
+aciertos=0
+intentos=0
+
+while [ $aciertos -ne ${#palabra[@]} ]
+do
+contador=0
+esta=0
+ read -p "Escribe una letra: " letra
+ letra=$(echo $letra | tr [:upper:] [:lower:])
+
+ for var in ${palabra[@]}
+ do
+  let contador++
+  if [ $letra == $var ] && [ $letra != ${respuesta[$((contador-1))]} ]
+  then
+   echo Esta en la posicion $contador
+   respuesta[$((contador-1))]=$var
+   let aciertos++
+   esta=1
+  fi
+ done
+ if [ $esta -eq 0 ]
+ then
+  let intentos++
+  echo "Llevas $intentos intentos de 20"
+ fi
+ if [ $intentos -eq 20 ]
+ then
+  echo "Perdiste, mejor ve a jugar canicas, la palabra correcta es $cad"
+  exit
+ fi
+echo ${respuesta[@]}
+done
+echo "Ya era hora, adivinaste la palabra
