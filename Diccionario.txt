@@ -1,0 +1,10 @@
+cd
+ls
+mkdir
+cat
+touch
+vi
+clear
+exit
+md5sum
+history
